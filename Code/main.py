@@ -19,9 +19,6 @@ def program_thread():
     real_flow = 0
     flow_sum = 0
     flow_mass_sum = 0
-    flow_30s = np.array([])
-    pressure = np.array([])
-    temperature = np.array([])
     extract_s = np.array([])
     extract_seeming = 0
     extract_true = 0
@@ -32,12 +29,8 @@ def program_thread():
     configs.fermentation_nr = fermentation_nr
                     
     #   -----   WAIT FOR USER START -----
-    run_calculations = False
-    run_ml = False
-
     try:
         while True:
-            # wait for program start
             while not configs.run_program:
                 time.sleep(0.5)
 
@@ -71,8 +64,6 @@ def program_thread():
             while configs.run_program:
                 print("Active program")
                 time.sleep(1)
-                                
-                # CODE HERE !!!!!!!!!!!!!!!!!!!!!!!!!!
                 
                 now = datetime.now()
                 timestamp = round(datetime.timestamp(now))
@@ -87,24 +78,23 @@ def program_thread():
                     #   -------------------------------------------
                     
                     duration_days = (timestamp - start_timestamp)*(1/86400)
-                    press, flow = com.read_pressure_airflow()
+                    press, flow = com.read_pressure_flow()
                     temp = com.read_temperature()                      # !!!!! noch unklar !!!!!
                     db.insert_input(fermentation_nr, timestamp, flow, press, temp)
-                    # print ("read data \n duration[days]:", duration_days,
-                    #        "\nflow [bar]:" flow,
-                    #        "\npressure [bar]:" press,
-                    #        "\ntemperature [°C]:", temp)
+                    print ("\n\n\nread data"
+                           "\nduration[days]:", duration_days,
+                           "\nflow [bar]:", flow,
+                           "\npressure [bar]:", press,
+                           "\ntemperature [°C]:", temp)
                     
                     #   -----------------------------------------------------------------
                     #                       CONVERSIONS       
                     #   -----------------------------------------------------------------
-                    real_flow, flow_30s, flow_sum,
-                    pressure, temperature = ctrl.conversions(flow, flow_30s, flow_sum,
-                                                            press, pressure, temp, temperature)
+                    real_flow, flow_30s, flow_sum, pressure, temperature = ctrl.conversions(flow, flow_sum, press, temp)
                     
-                    flow_for_calc = flow_30s                    # [SL/30]
-                    pressure_for_calc = pressure[-1]            # [bar]
-                    temperature_for_calc = temperature[-1]      # [°C]
+                    flow_for_calc = flow_30s                      # [SL/30]
+                    pressure_for_calc = pressure                  # [bar]
+                    temperature_for_calc = temperature            # [°C]
                     
                     #   -----------------------------------------------------------------
                     #                       CALCULATION OF EXTRACT         
@@ -118,7 +108,7 @@ def program_thread():
                     ########################################################################
                     ###                 EVERY 30 MINUTES                                 ###
                     ########################################################################
-                    if timestamp >= timestamp_old_ml+1800 or run_ml == True:
+                    if timestamp >= timestamp_old_ml+1800:
                         
                         #   -------------------------------------------------------------------
                         #                   MODEL 1: CHECK FERMENTATION PHASE
@@ -156,28 +146,24 @@ def program_thread():
                     configs.phase_dash = phase_str
 
                     db.insert_neue_daten(fermentation_nr, duration_days, real_flow, flow_30s, flow_sum,
-                                pressure[-1], temperature[-1], set_pressure, set_temperature,
+                                pressure, temperature, set_pressure, set_temperature,
                                 phase,  extract_true, extract_seeming,
                                 extract_delta05, extract_delta6, extract_delta24)
                     
-                    # print ("read data \n duration[days]:", duration_days,
-                    #        "\nflow [bar]:" flow_30s,
-                    #        "\npressure [bar]:" pressure[-1],
-                    #        "\ntemperature [°C]:", temperature[-1],
-                    #        "\nphase:", phase,
-                    #        "\nextract_seeming [bar]:" extract_seeming,
-                    #        "\nextract_delta24" press,
-                    #        "\nset_temperature [°C]:", set_temperature,
-                    #        "\nset_pressure [bar]", set_pressure)
+                    print ("\n\n\nconverted data \n duration[days]:", duration_days,
+                           "\nflow [bar]:", flow_30s,
+                           "\npressure [bar]:", pressure[-1],
+                           "\ntemperature [°C]:", temperature[-1],
+                           "\nphase:", phase,
+                           "\nextract_seeming [bar]:", extract_seeming,
+                           "\nextract_delta24", press,
+                           "\nset_temperature [°C]:", set_temperature,
+                           "\nset_pressure [bar]", set_pressure)
 
                     timestamp_old = timestamp
                 
-
-                
-                
-                
-                
-                
+    
+                  
             print("Prgram stopped")
     except KeyboardInterrupt:
         print("exit")

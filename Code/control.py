@@ -9,26 +9,19 @@ from sklearn.preprocessing import StandardScaler
 #   -----------------------------------------------------------------
 #                       CONVERSIONS OF INOUT DATA       
 #   -----------------------------------------------------------------
-def conversions(flow, flow_30s, flow_sum, press, pressure, temp, temperature):
+def conversions(flow, flow_sum, press, temp):
     #   -----   flow    -----
-    real_flow = round(flow*0.06, 3)                                 # [SLPM]
-    flow_30s = flow_30s.append(round(real_flow*0.5, 3))            # [SL/30s]
-    if len(flow_30s) >= 5:
-        flow_30s[-1] = (flow_30s[-1]+flow_30s[-2]+flow_30s[-3]+flow_30s[-4]+flow_30s[-5])*0.2
-    # CO2-Flow-Sum
+    real_flow = round(flow*0.06, 3)                                 # [SLPM]     conversion because of faulty senor values
+    flow_30s = round(real_flow*0.5, 4)                              # [SL/30s]
     flow_sum += flow_30s[-1]                                        # [L]
     
     #   -----   pressure    -----
     # average of 5 last values
-    pressure = pressure.append(round(press*0.5, 2))                 # [bar]
-    if len(pressure) >= 5:
-        pressure[-1] = (pressure[-1]+pressure[-2]+pressure[-3]+pressure[-4]+pressure[-5])*0.2
+    pressure = round(press, 2)                                       # [bar]
     
     #   -----   temperature    -----
     # average of 5 last values
-    temperature = temperature.append(round(temp*0.5, 2))            # [°C]
-    if len(temperature) >= 5:
-        temperature[-1] = (temperature[-1]+temperature[-2]+temperature[-3]+temperature[-4]+temperature[-5])*0.2
+    temperature = round(temp, 2)                                      # [°C]
     
     return real_flow, flow_30s, flow_sum, pressure, temperature
 
@@ -98,7 +91,7 @@ def calc_extract(pressure_for_calc, temperature_for_calc, flow_for_calc, flow_ma
 #                   MODEL 1
 #   -------------------------------------------------------------
 
-def find_phase(wort_vol, duration_days, flow_sum, extract_delta6):
+def find_phase(duration_days, extract_delta6):
     
     classification_path = 'models/clf_model.sav'
     
@@ -116,9 +109,8 @@ def find_phase(wort_vol, duration_days, flow_sum, extract_delta6):
 #                   MODEL 2
 #   -----------------------------------------------------------
 
-def adjust_parameter(goal24, wort_vol, flow_30s,
-                     pressure, temperature, set_pressure, set_temperature,
-                     extract, delta05, delta6):
+def adjust_parameter(goal24, set_pressure, set_temperature,
+                     extract, delta6):
     
     regression_path = 'models/reg_model.sav'
     done = False
@@ -131,7 +123,7 @@ def adjust_parameter(goal24, wort_vol, flow_30s,
     while done == False and -3.1 < set_temperature_new-set_temperature < 3.1 and set_pressure_new <=1.1:
         
         #   -----   input   -----
-        X = np.array([set_pressure_new, set_temperature_new, extract, delta6])
+        X = np.array([set_pressure_new, set_temperature_new, extract, delta6]).reshape(1, -1)
         #   -----   predict extract in 6h -----
         extract_6h = model_extract.predit(X)
         

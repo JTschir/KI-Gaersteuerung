@@ -33,12 +33,12 @@ def read_temperature():
 #                                       PRESSURE & FLOW
 #   -------------------------------------------------------------------------------------
 
-def set_pressure(setpressure, IP):
-    requests.get(IP + "/setpressure?pressure="+setpressure)
+def set_pressure(setpressure):
+    requests.get("http://192.168.27.113/setpressure?pressure="+setpressure)
 
 
-def read_pressure_airflow(IP):
-    values = requests.get(IP + "/measurment")
+def read_pressure_flow():
+    values = requests.get("http://192.168.27.113/measurement")
     pressure_dict=values['pressure']
     pressure =(pressure_dict['bar'])
     if pressure < 0:
