@@ -2,8 +2,8 @@ import pickle
 import communication_for_values as com
 import math
 import numpy as np
-
-from sklearn.preprocessing import StandardScaler
+from sklearn.neural_network import MLPClassifier
+from sklearn.neural_network import MLPRegressor
 
 
 #   -----------------------------------------------------------------
@@ -155,6 +155,6 @@ def adjust_parameter(goal24, set_pressure, set_temperature,
     elif set_temperature >= 15:
         set_temperature = 15
         
-    com.set_temperature(set_pressure)
+    com.set_temperature(set_temperature)
     com.set_pressure(set_pressure)
     return set_temperature, set_pressure, extract_6h

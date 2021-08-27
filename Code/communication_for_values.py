@@ -1,13 +1,12 @@
 
 import requests
-import json
 
 #   ----------------------------------------------------------------------------------
 #                                       TEMPERATURE                            
 #   ----------------------------------------------------------------------------------
 
 def set_temperature(settemp):
-    targ = "gaertank2"
+    targ = "gaertank1"
     newTemp = settemp
     newKp = 300000
     newKi = 500
@@ -35,7 +34,7 @@ def read_temperature():
 #   -------------------------------------------------------------------------------------
 
 def set_pressure(setpressure):
-    requests.get("http://130.75.58.189/setpressure?pressure="+setpressure)
+    requests.get("http://130.75.58.189/setpressure?pressure="+str(setpressure))
 
 
 def read_pressure_flow():

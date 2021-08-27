@@ -1,10 +1,10 @@
 import numpy as np
 import time
 import threading
+from datetime import datetime
 
 import sql_austausch as db
 import communication_for_values as com
-from datetime import datetime
 from store import ConfigStore
 from app import run_server
 import control as ctrl
@@ -57,6 +57,9 @@ def program_thread():
             rest_volume = (tank_vol - wort_vol)                         # [m^3]
             extract_mass_start = (sw * wort_mass) / 100                 # [kg]
 
+            
+            com.set_temperature(set_temperature)
+            com.set_pressure(set_pressure)
             ################################################################################
             ###                         ITERATE WHILE ACTIVE                             ###
             ################################################################################
@@ -107,12 +110,12 @@ def program_thread():
                                                     flow_for_calc, flow_mass_sum,
                                                     wort_vol, rest_volume, extract_mass_start, sw, extract_s)
                     flow_mass_sum = calculations[0]
-                    extract_true = calculations[1]
-                    extract_s = calculations[2]
-                    extract_seeming = calculations[3]
-                    extract_delta05 = calculations[4]
-                    extract_delta6 = calculations[5]
-                    extract_delta24 = calculations[6]
+                    extract_true = np.round(calculations[1],2)
+                    extract_s = np.array(calculations[2],2)
+                    extract_seeming = np.array(calculations[3],2)
+                    extract_delta05 = np.array(calculations[4],2)
+                    extract_delta6 = np.array(calculations[5],2)
+                    extract_delta24 = np.array(calculations[6],2)
                     
                     ########################################################################
                     ###                 EVERY 30 MINUTES                                 ###
@@ -145,14 +148,14 @@ def program_thread():
                     configs.temperature_dash = temperature
                     configs.pressure_dash = pressure
                     configs.extract_s_dash = extract_seeming
-                    configs.extract_delta24_dash = extract_delta24
+                    configs.extract_delta24_dash = extract_delta6*4
                     configs.set_temperature_dash = set_temperature
                     configs.set_pressure_dash = set_pressure
                     configs.phase_dash = phase
 
                     db.insert_neue_daten(fermentation_nr, duration_days, flow_30s, flow_sum,
                                 pressure, temperature, set_pressure, set_temperature,
-                                phase,  extract_true, extract_seeming,
+                                phase, extract_true, extract_seeming,
                                 extract_delta05, extract_delta6, extract_delta24)
                     
                     

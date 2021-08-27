@@ -10,10 +10,10 @@ from dash.dependencies import Input, Output
 from store import ConfigStore
 
 import sql_austausch as db
-
+import pandas as pd
 import plotly.express as px
 import plotly.graph_objs as go
-import pandas as pd
+
 
 def run_server(configs):
     app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
@@ -143,7 +143,7 @@ def run_server(configs):
 
     form_flow_state = dbc.FormGroup(
         [
-            dbc.Label("CO2-Durchfluss [l/30s]", html_for="flow_state", width=9),
+            dbc.Label("CO2-Durchfluss [l/min]", html_for="flow_state", width=9),
             dbc.Col(dbc.Label(id="flow_state", width=15)),
         ],
         row=True,
@@ -184,7 +184,7 @@ def run_server(configs):
 
     form_extract_content = dbc.FormGroup(
         [
-            dbc.Label("Extraktgehalt 24h", html_for="extract_content", width=9),
+            dbc.Label("Extraktabbau 24h", html_for="extract_content", width=9),
             dbc.Col(dbc.Label(id="extract_content", width=15)),
         ],
         row=True,
@@ -284,7 +284,7 @@ def run_server(configs):
             dbc.Form([form_diagrams, form_diagrams_extract]),
             dcc.Interval(
                 id='interval',
-                interval=2*1000,    # [ms]
+                interval=5*1000,    # [ms]
                 n_intervals = 0
             )
         ],
