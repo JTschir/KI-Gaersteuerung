@@ -141,6 +141,39 @@ def run_server(configs):
 
     #---------------------- Tab-2 Dashboard --------------------------------
 
+    form_flow_state = dbc.FormGroup(
+        [
+            dbc.Label("CO2-Durchfluss [l/30s]", html_for="flow_state", width=9),
+            dbc.Col(dbc.Label(id="flow_state", width=15)),
+        ],
+        row=True,
+    )
+
+    form_extract_s = dbc.FormGroup(
+        [
+            dbc.Label("Extraktgehalt (scheinbar) [°P]", html_for="extract_s", width=9),
+            dbc.Col(dbc.Label(id="extract_s", width=15)),
+        ],
+        row=True,
+    )
+
+    form_temperature = dbc.FormGroup(
+        [
+            dbc.Label("Temperatur [°C]", html_for="temperature", width=9),
+            dbc.Col(dbc.Label(id="temperature", width=15)),
+        ],
+        row=True,
+    )
+
+    form_pressure = dbc.FormGroup(
+        [
+            dbc.Label("Druck [bar]", html_for="pressure", width=9),
+            dbc.Col(dbc.Label(id="pressure", width=15)),
+        ],
+        row=True,
+    )
+    
+
     form_fermentation_state = dbc.FormGroup(
         [
             dbc.Label("Gärphase", html_for="fermentation_state", width=9),
@@ -239,7 +272,7 @@ def run_server(configs):
                     id="extrakt",
                     figure=fig_extract,
                 ),
-            dbc.Form([form_fermentation_state, form_extract_content,form_set_temperature, form_set_pressure]),
+            dbc.Form([form_flow_state, form_temperature, form_pressure, form_extract_s, form_extract_content, form_fermentation_state, form_set_temperature, form_set_pressure]),
         ],
         row=True,
 
@@ -261,8 +294,12 @@ def run_server(configs):
 
     @app.callback(
         [
-            Output("fermentation_state", "children"),
+            Output("flow_state", "children"),
+            Output("temperature", "children"),
+            Output("pressure", "children"),
+            Output("extract_s", "children"),
             Output("extract_content", "children"),
+            Output("fermentation_state", "children"),
             Output("set_temperature_dash", "children"),
             Output("set_pressure_dash", "children"),
               
@@ -274,8 +311,12 @@ def run_server(configs):
 
     def update_dash(n):
         return [
-            configs.phase_dash,
+            configs.flow_dash,
+            configs.temperature_dash,
+            configs.pressure_dash,
+            configs.extract_s_dash,
             configs.extract_delta24_dash,
+            configs.phase_dash,
             configs.set_temperature_dash,
             configs.set_pressure_dash
             ]

@@ -7,10 +7,16 @@ class ConfigStore:
     set_pressure = 0        # Solldruck für Angärphase [bar]
     run_program = False     # Process starten
 
+
+    flow_dash = None
+    extract_s_dash = None
+    temperature_dash = None        # Temperatur
+    pressure_dash = None           # Druck
     phase_dash = None
     extract_delta24_dash = None
-    set_temperature_dash = 8  #Solltemperatur
-    set_pressure_dash = 0     #Solldruck
+    set_temperature_dash = 8    # Solltemperatur
+    set_pressure_dash = 0       # Solldruck
+
 
 
     fermentation_nr = 3

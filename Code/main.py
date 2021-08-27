@@ -29,7 +29,8 @@ def program_thread():
     timestamp_old = 0
     timestamp_old_ml = 0
     fermentation_nr = (db.read("Suddetails", "Max(SudID)"))[0][0]+1         # add 1 to highest value of SudID in DB
-
+    configs.fermentation_nr = fermentation_nr
+                    
     #   -----   WAIT FOR USER START -----
     run_calculations = False
     run_ml = False
@@ -144,12 +145,15 @@ def program_thread():
                     elif phase == 3:
                         phase_str = "Nachgärphase"
 
-                    configs.fermentation_nr = fermentation_nr
+                    
+                    configs.extract_delta24_dash = extract_delta24
+                    configs.set_temperature_dash = set_temperature
+                    configs.set_pressure_dash = set_pressure
                     configs.phase_dash = phase_str
                     configs.extract_delta24_dash = extract_delta24
                     configs.set_temperature_dash = set_temperature
                     configs.set_pressure_dash = set_pressure
-
+                    configs.phase_dash = phase_str
 
                     db.insert_neue_daten(fermentation_nr, duration_days, real_flow, flow_30s, flow_sum,
                                 pressure[-1], temperature[-1], set_pressure, set_temperature,
