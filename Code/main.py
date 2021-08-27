@@ -9,31 +9,31 @@ from store import ConfigStore
 from app import run_server
 import control as ctrl
 
-phase = 1
-real_flow = 0
-flow_sum = 0
-flow_mass_sum = 0
-flow_30s = np.array([])
-pressure = np.array([])
-temperature = np.array([])
-extract_s = np.array([])
-extract_seeming = 0
-extract_true = 0
-extract_6h_future = 0
-timestamp_old = 0
-timestamp_old_ml = 0
-fermentation_nr = (db.read("Suddetails", "Max(SudID)"))[0][0]+1         # add 1 to highest value of SudID in DB
-
-#   -----   WAIT FOR USER START -----
-run_calculations = False
-run_ml = False
-
 
 configs = ConfigStore()
 
-configs.fermentation_nr = fermentation_nr
+
 
 def program_thread():
+    phase = 1
+    real_flow = 0
+    flow_sum = 0
+    flow_mass_sum = 0
+    flow_30s = np.array([])
+    pressure = np.array([])
+    temperature = np.array([])
+    extract_s = np.array([])
+    extract_seeming = 0
+    extract_true = 0
+    extract_6h_future = 0
+    timestamp_old = 0
+    timestamp_old_ml = 0
+    fermentation_nr = (db.read("Suddetails", "Max(SudID)"))[0][0]+1         # add 1 to highest value of SudID in DB
+
+    #   -----   WAIT FOR USER START -----
+    run_calculations = False
+    run_ml = False
+
     try:
         while True:
             # wait for program start
@@ -87,12 +87,13 @@ def program_thread():
                     
                     duration_days = (timestamp - start_timestamp)*(1/86400)
                     press, flow = com.read_pressure_airflow()
-                    temp = com.read_temp()                      # !!!!! noch unklar !!!!!
+                    temp = com.read_temperature()                      # !!!!! noch unklar !!!!!
                     db.insert_input(fermentation_nr, timestamp, flow, press, temp)
-                    print ("read data \n duration[days]:", duration_days,
-                           "\nflow [bar]:" flow,
-                           "\npressure [bar]:" press,
-                           "\ntemperature [°C]:", temp)
+                    # print ("read data \n duration[days]:", duration_days,
+                    #        "\nflow [bar]:" flow,
+                    #        "\npressure [bar]:" press,
+                    #        "\ntemperature [°C]:", temp)
+                    
                     #   -----------------------------------------------------------------
                     #                       CONVERSIONS       
                     #   -----------------------------------------------------------------
@@ -143,6 +144,7 @@ def program_thread():
                     elif phase == 3:
                         phase_str = "Nachgärphase"
 
+                    configs.fermentation_nr = fermentation_nr
                     configs.phase_dash = phase_str
                     configs.extract_delta24_dash = extract_delta24
                     configs.set_temperature_dash = set_temperature
@@ -154,15 +156,15 @@ def program_thread():
                                 phase,  extract_true, extract_seeming,
                                 extract_delta05, extract_delta6, extract_delta24)
                     
-                    print ("read data \n duration[days]:", duration_days,
-                           "\nflow [bar]:" flow_30s,
-                           "\npressure [bar]:" pressure[-1],
-                           "\ntemperature [°C]:", temperature[-1],
-                           "\nphase:", phase,
-                           "\nextract_seeming [bar]:" extract_seeming,
-                           "\nextract_delta24" press,
-                           "\nset_temperature [°C]:", set_temperature,
-                           "\nset_pressure [bar]", set_pressure)
+                    # print ("read data \n duration[days]:", duration_days,
+                    #        "\nflow [bar]:" flow_30s,
+                    #        "\npressure [bar]:" pressure[-1],
+                    #        "\ntemperature [°C]:", temperature[-1],
+                    #        "\nphase:", phase,
+                    #        "\nextract_seeming [bar]:" extract_seeming,
+                    #        "\nextract_delta24" press,
+                    #        "\nset_temperature [°C]:", set_temperature,
+                    #        "\nset_pressure [bar]", set_pressure)
 
                     timestamp_old = timestamp
                 
