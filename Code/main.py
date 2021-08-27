@@ -57,8 +57,8 @@ def program_thread():
             print("set_pressure:", configs.set_pressure)
             db.insert_suddetails(fermentation_nr, configs.sw, configs.tank_vol, configs.wort_vol, configs.delta_goal)
             #   -----   INDIVIDUAL CONSTANTS AT START   -----
-            start_date = datetime.datetime.now()
-            start_timestamp = datetime.datetime.timestamp(start_date)
+            start_date = datetime.now()
+            start_timestamp = datetime.timestamp(start_date)
             specific_weigth = (sw*4/1000)+1                     
             wort_mass = (wort_vol*1000)*specific_weigth                 # [kg],  (notice conversions: m^3 -> liter)
             rest_volume = (tank_vol - wort_vol)                         # [m^3]
@@ -87,9 +87,12 @@ def program_thread():
                     
                     duration_days = (timestamp - start_timestamp)*(1/86400)
                     press, flow = com.read_pressure_airflow()
-                    temp = com.read_temp()                    # !!!!! noch unklar !!!!!
+                    temp = com.read_temp()                      # !!!!! noch unklar !!!!!
                     db.insert_input(fermentation_nr, timestamp, flow, press, temp)
-
+                    print ("read data \n duration[days]:", duration_days,
+                           "\nflow [bar]:" flow,
+                           "\npressure [bar]:" press,
+                           "\ntemperature [°C]:", temp)
                     #   -----------------------------------------------------------------
                     #                       CONVERSIONS       
                     #   -----------------------------------------------------------------
@@ -151,11 +154,19 @@ def program_thread():
                                 phase,  extract_true, extract_seeming,
                                 extract_delta05, extract_delta6, extract_delta24)
                     
+                    print ("read data \n duration[days]:", duration_days,
+                           "\nflow [bar]:" flow_30s,
+                           "\npressure [bar]:" pressure[-1],
+                           "\ntemperature [°C]:", temperature[-1],
+                           "\nphase:", phase,
+                           "\nextract_seeming [bar]:" extract_seeming,
+                           "\nextract_delta24" press,
+                           "\nset_temperature [°C]:", set_temperature,
+                           "\nset_pressure [bar]", set_pressure)
+
                     timestamp_old = timestamp
                 
 
-                
-                
                 
                 
                 
