@@ -13,7 +13,7 @@ def conversions(flow, flow_sum, press, temp):
     #   -----   flow    -----
     real_flow = round(flow*0.06, 3)                                 # [SLPM]     conversion because of faulty senor values
     flow_30s = round(real_flow*0.5, 4)                              # [SL/30s]
-    flow_sum += flow_30s[-1]                                        # [L]
+    flow_sum += flow_30s                                        # [L]
     
     #   -----   pressure    -----
     # average of 5 last values
@@ -63,7 +63,7 @@ def calc_extract(pressure_for_calc, temperature_for_calc, flow_for_calc, flow_ma
     extract_true = sw - (degree_of_fermentation * sw)                           # [°P]
     extract_seeming = (extract_true - (0.1808*sw))/0.8192                       # [°P]
 
-    extract_s = extract_s.append(extract_seeming)
+    extract_s = np.append(extract_s, extract_seeming)
 
     #   -----   extract seeming delta   -----
     # 24 hours 
@@ -100,7 +100,7 @@ def find_phase(duration_days, extract_delta6):
     # load model
     model_phase = pickle.load(open(classification_path, 'rb'))
     # predict fermentation phase
-    phase = model_phase.predit(X)
+    phase = model_phase.predict(X)
     
     return phase
 
@@ -125,7 +125,7 @@ def adjust_parameter(goal24, set_pressure, set_temperature,
         #   -----   input   -----
         X = np.array([set_pressure_new, set_temperature_new, extract, delta6]).reshape(1, -1)
         #   -----   predict extract in 6h -----
-        extract_6h = model_extract.predit(X)
+        extract_6h = model_extract.predict(X)
         
         #   -----   change  set values depending on extract delta   ------ 
         delta6_future = extract_6h - extract

@@ -1,0 +1,4 @@
+import requests
+
+a = requests.get("http://130.75.58.189/measurement")
+print(a)

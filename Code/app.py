@@ -284,7 +284,7 @@ def run_server(configs):
             dbc.Form([form_diagrams, form_diagrams_extract]),
             dcc.Interval(
                 id='interval',
-                interval=2*1000, #in milliseconds
+                interval=2*1000,    # [ms]
                 n_intervals = 0
             )
         ],

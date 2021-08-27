@@ -1,5 +1,6 @@
 
 import requests
+import json
 
 #   ----------------------------------------------------------------------------------
 #                                       TEMPERATURE                            
@@ -34,19 +35,21 @@ def read_temperature():
 #   -------------------------------------------------------------------------------------
 
 def set_pressure(setpressure):
-    requests.get("http://192.168.27.113/setpressure?pressure="+setpressure)
+    requests.get("http://130.75.58.189/setpressure?pressure="+setpressure)
 
 
 def read_pressure_flow():
-    values = requests.get("http://192.168.27.113/measurement")
-    pressure_dict=values['pressure']
-    pressure =(pressure_dict['bar'])
+    values = requests.get("http://130.75.58.189/measurement")
+    values_dict = values.json()
+    # values_dict = json.loads(values_json)
+    pressure_dict=values_dict['pressure']
+    pressure =pressure_dict['bar']
     if pressure < 0:
         pressure = 0
-    airflow_dict = values['airflow']
+    airflow_dict = values_dict['airflow']
     airflow = airflow_dict['flow']
     if airflow < 0:
         airflow = 0
-    return pressure, airflow
+    return [pressure, airflow]
 
 

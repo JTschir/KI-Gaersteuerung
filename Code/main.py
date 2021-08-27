@@ -16,7 +16,6 @@ configs = ConfigStore()
 
 def program_thread():
     phase = 1
-    real_flow = 0
     flow_sum = 0
     flow_mass_sum = 0
     extract_s = np.array([])
@@ -78,7 +77,8 @@ def program_thread():
                     #   -------------------------------------------
                     
                     duration_days = (timestamp - start_timestamp)*(1/86400)
-                    press, flow = com.read_pressure_flow()
+                    press = com.read_pressure_flow()[0]
+                    flow = com.read_pressure_flow()[0]
                     temp = com.read_temperature()                      # !!!!! noch unklar !!!!!
                     db.insert_input(fermentation_nr, timestamp, flow, press, temp)
                     print ("\n\n\nread data"
@@ -90,20 +90,29 @@ def program_thread():
                     #   -----------------------------------------------------------------
                     #                       CONVERSIONS       
                     #   -----------------------------------------------------------------
-                    real_flow, flow_30s, flow_sum, pressure, temperature = ctrl.conversions(flow, flow_sum, press, temp)
-                    
+                    conversions = ctrl.conversions(flow, flow_sum, press, temp)
+                    flow_30s = conversions[1]
+                    flow_sum = conversions[2]
+                    pressure = conversions[3]
+                    temperature = conversions[4]
+                     
                     flow_for_calc = flow_30s                      # [SL/30]
                     pressure_for_calc = pressure                  # [bar]
                     temperature_for_calc = temperature            # [°C]
                     
                     #   -----------------------------------------------------------------
                     #                       CALCULATION OF EXTRACT         
-                    #   -----------------------------------------------------------------
-                    flow_mass_sum,
-                    extract_true, extract_s, extract_seeming,
-                    extract_delta05, extract_delta6 ,extract_delta24 = ctrl.calc_extract(pressure_for_calc, temperature_for_calc,
-                                                                                         flow_for_calc, flow_mass_sum,
-                                                                                         wort_vol, rest_volume, extract_mass_start, sw, extract_s)
+                    #   -----------------------------------------------------------------                     
+                    calculations = ctrl.calc_extract(pressure_for_calc, temperature_for_calc,
+                                                    flow_for_calc, flow_mass_sum,
+                                                    wort_vol, rest_volume, extract_mass_start, sw, extract_s)
+                    flow_mass_sum = calculations[0]
+                    extract_true = calculations[1]
+                    extract_s = calculations[2]
+                    extract_seeming = calculations[3]
+                    extract_delta05 = calculations[4]
+                    extract_delta6 = calculations[5]
+                    extract_delta24 = calculations[6]
                     
                     ########################################################################
                     ###                 EVERY 30 MINUTES                                 ###
@@ -119,9 +128,13 @@ def program_thread():
                             #   -------------------------------------------------------------------
                             #                   CONTROL WITH MODEL 2
                             #   -------------------------------------------------------------------
-                            set_temperature, set_pressure, extract_6h_future = ctrl.adjust_parameter(delta_goal,
-                                                                                set_pressure, set_temperature,
-                                                                                extract_seeming, extract_delta6)
+                            
+                            parameters = ctrl.adjust_parameter(delta_goal,
+                                                                set_pressure, set_temperature,
+                                                                extract_seeming, extract_delta6)
+                            set_temperature = parameters[0]
+                            set_pressure = parameters[1]
+                            extract_6h_future = parameters[2]
                             
                             db.insert_ml_berechnungen(fermentation_nr, duration_days, phase, extract_6h_future)
                             
@@ -145,15 +158,16 @@ def program_thread():
                     configs.set_pressure_dash = set_pressure
                     configs.phase_dash = phase_str
 
-                    db.insert_neue_daten(fermentation_nr, duration_days, real_flow, flow_30s, flow_sum,
+                    db.insert_neue_daten(fermentation_nr, duration_days, flow_30s, flow_sum,
                                 pressure, temperature, set_pressure, set_temperature,
                                 phase,  extract_true, extract_seeming,
                                 extract_delta05, extract_delta6, extract_delta24)
                     
+                    
                     print ("\n\n\nconverted data \n duration[days]:", duration_days,
                            "\nflow [bar]:", flow_30s,
-                           "\npressure [bar]:", pressure[-1],
-                           "\ntemperature [°C]:", temperature[-1],
+                           "\npressure [bar]:", pressure,
+                           "\ntemperature [°C]:", temperature,
                            "\nphase:", phase,
                            "\nextract_seeming [bar]:", extract_seeming,
                            "\nextract_delta24", press,
