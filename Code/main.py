@@ -141,22 +141,14 @@ def program_thread():
                             
                         timestamp_old_ml = timestamp
                     
-                    if phase == 1:
-                        phase_str = "Angärphase"
-                    elif phase == 2:
-                        phase_str = "Hauptgärphase"
-                    elif phase == 3:
-                        phase_str = "Nachgärphase"
-
-                    
+                    configs.flow_dash = flow_30s*2
+                    configs.temperature_dash = temperature
+                    configs.pressure_dash = pressure
+                    configs.extract_s_dash = extract_seeming
                     configs.extract_delta24_dash = extract_delta24
                     configs.set_temperature_dash = set_temperature
                     configs.set_pressure_dash = set_pressure
-                    configs.phase_dash = phase_str
-                    configs.extract_delta24_dash = extract_delta24
-                    configs.set_temperature_dash = set_temperature
-                    configs.set_pressure_dash = set_pressure
-                    configs.phase_dash = phase_str
+                    configs.phase_dash = phase
 
                     db.insert_neue_daten(fermentation_nr, duration_days, flow_30s, flow_sum,
                                 pressure, temperature, set_pressure, set_temperature,

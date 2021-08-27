@@ -12,8 +12,8 @@ class ConfigStore:
     extract_s_dash = None
     temperature_dash = None        # Temperatur
     pressure_dash = None           # Druck
-    phase_dash = None
-    extract_delta24_dash = None
+    phase_dash = 1.2
+    extract_delta24_dash = 2.1
     set_temperature_dash = 8    # Solltemperatur
     set_pressure_dash = 0       # Solldruck
 
