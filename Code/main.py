@@ -77,7 +77,7 @@ def program_thread():
                     #           READ ALL SENSOR VALUES          
                     #   -------------------------------------------
                     
-                    duration_days = (timestamp - start_timestamp)*(1/86400)
+                    duration_days = round((timestamp - start_timestamp)*(1/86400),4)
                     press = com.read_pressure_flow()[0]
                     flow = com.read_pressure_flow()[0]
                     temp = com.read_temperature()                      # !!!!! noch unklar !!!!!
