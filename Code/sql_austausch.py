@@ -80,7 +80,7 @@ def insert_ml_berechnungen(sud_nr, time_days, phase, extraktgehalt_6h_s):
     # ----- 3. SQL-Query übergeben -----
     berechnungen = (sud_nr, time_days, phase, extraktgehalt_6h_s)
     cursor.execute("""
-                   INSERT INTO Suddetails
+                   INSERT INTO ML_Berechnungen
                    VALUES (?,?,?,?)
                    """, berechnungen
                     )   
