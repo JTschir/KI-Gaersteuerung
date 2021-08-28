@@ -109,18 +109,18 @@ def find_phase(duration_days, extract_delta6):
 #                   MODEL 2
 #   -----------------------------------------------------------
 
-def adjust_parameter(goal24, set_pressure, set_temperature,
+def adjust_parameter(goal24, pressure, temperature,
                      extract, delta6):
     
     regression_path = 'models/reg_model.sav'
     done = False
-    set_temperature_new = set_temperature
-    set_pressure_new = set_pressure+1.01325
+    set_temperature_new = temperature
+    set_pressure_new = pressure+1.01325
     
     #   -----   load model for regression of fermentation process   -----
     model_extract = pickle.load(open(regression_path, 'rb'))
 
-    while done == False and -2.1 < set_temperature_new-set_temperature < 2.1 and set_pressure_new <=1.1:
+    while done == False and -2.1 < set_temperature_new-temperature < 2.1 and set_pressure_new <=1.1:
         
         #   -----   input   -----
         X = np.array([set_pressure_new, set_temperature_new, extract, delta6]).reshape(1, -1)
@@ -131,31 +131,32 @@ def adjust_parameter(goal24, set_pressure, set_temperature,
         delta6_future = extract_6h - extract
         check_delta = delta6_future*4
         control_parameter = goal24 - check_delta
+        i = 0
         if -0.1 <= control_parameter <= 0.1:
             done = True
-        elif control_parameter <= -0.4:
-            set_temperature_new -= 1
-            set_pressure_new += 0.2
         elif control_parameter <= -0.1:
-            set_temperature_new -= 0.2
+            i += 1
+            set_temperature_new -= 0.1
+            if i%11 == 0:
+                set_pressure_new += 0.1
         elif control_parameter >= -0.1:
-            set_temperature_new += 0.2
-            set_pressure_new = 0
-    
+            set_temperature_new += 0.1
     
     set_pressure_new -= 1.01325
     #   -----   CHECK BORDERS   -----
-    if set_pressure <= 1:
+    if set_pressure_new <= 0:
+        set_pressure = 0
+    elif set_pressure_new <= 1:
         set_pressure = set_pressure_new
-    else:
+    elif set_pressure_new >= 1:
         set_pressure = 1
     
-    if 4 <= set_temperature <= 14:
+    if 4 <= set_temperature_new <= 15:
         set_temperature = set_temperature_new
-    elif set_temperature <= 4:
+    elif set_temperature_new <= 4:
         set_temperature = 4
-    elif set_temperature >= 14:
-        set_temperature = 14
+    elif set_temperature_new >= 15:
+        set_temperature = 15
         
         
     com.set_temperature(set_temperature)

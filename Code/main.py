@@ -131,7 +131,7 @@ def program_thread():
                             #   -------------------------------------------------------------------
                             
                             parameters = ctrl.adjust_parameter(delta_goal,
-                                                                set_pressure, set_temperature,
+                                                                pressure_for_calc, temperature_for_calc,
                                                                 extract_seeming, extract_delta6)
                             set_temperature = parameters[0]
                             set_pressure = parameters[1]
