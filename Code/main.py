@@ -110,11 +110,11 @@ def program_thread():
                                                     wort_vol, rest_volume, extract_mass_start, sw, extract_s)
                     flow_mass_sum = calculations[0]
                     extract_true = np.round(calculations[1],2)
-                    extract_s = np.array(calculations[2],2)
-                    extract_seeming = np.array(calculations[3],2)
-                    extract_delta05 = np.array(calculations[4],2)
-                    extract_delta6 = np.array(calculations[5],2)
-                    extract_delta24 = np.array(calculations[6],2)
+                    extract_s = np.round(calculations[2],2)
+                    extract_seeming = np.round(calculations[3],2)
+                    extract_delta05 = np.round(calculations[4],2)
+                    extract_delta6 = np.round(calculations[5],2)
+                    extract_delta24 = np.round(calculations[6],2)
                     
                     ########################################################################
                     ###                 EVERY 30 MINUTES                                 ###
