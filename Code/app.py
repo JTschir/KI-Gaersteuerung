@@ -8,7 +8,7 @@ import dash_bootstrap_components as dbc
 from dash.exceptions import PreventUpdate
 from dash.dependencies import Input, Output
 from store import ConfigStore
-
+from flask import Flask
 import sql_austausch as db
 import pandas as pd
 import plotly.express as px
@@ -325,7 +325,6 @@ def run_server(configs):
 
     #-------------------- Layout --------------------------------
 
-
     app.layout = html.Div([
         html.H1("Gärprozess UI"),
         dbc.Tabs(
@@ -338,7 +337,7 @@ def run_server(configs):
         )
     ])
 
-    app.run_server(debug=True)
+    app.run_server(debug=True, host='0.0.0.0')
 
 if __name__ == "__main__":
     store = ConfigStore()
