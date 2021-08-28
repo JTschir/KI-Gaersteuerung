@@ -19,4 +19,4 @@ class ConfigStore:
 
 
 
-    fermentation_nr = 3
+    fermentation_nr = 36
