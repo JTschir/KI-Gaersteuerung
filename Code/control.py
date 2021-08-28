@@ -114,7 +114,7 @@ def adjust_parameter(goal24, set_pressure, set_temperature,
     
     regression_path = 'models/reg_model.sav'
     done = False
-    set_temperature_new = set_temperature
+    set_temperature_new = set_temperature+1.01325
     set_pressure_new = set_pressure
     
     #   -----   load model for regression of fermentation process   -----

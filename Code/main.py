@@ -141,7 +141,9 @@ def program_thread():
                             set_temperature = parameters[0]
                             set_pressure = parameters[1]
                             extract_6h_future = parameters[2]
-                            
+                            print("\nml:",
+                                  "\nset_temperature:", set_temperature,
+                                  "\nset_pressurure:", set_pressure,)
                             db.insert_ml_berechnungen(fermentation_nr, duration_days, phase, extract_6h_future)
                             
                             
@@ -163,7 +165,7 @@ def program_thread():
                     
                     
                     print ("\n\n\nconverted data \n duration[days]:", duration_days,
-                           "\nflow [bar]:", flow_30s,
+                           "\nflow [SLPM]:", flow_30s,
                            "\npressure [bar]:", pressure,
                            "\ntemperature [°C]:", temperature,
                            "\nphase:", phase,

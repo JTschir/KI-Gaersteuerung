@@ -47,7 +47,7 @@ def read_pressure_flow():
         pressure = 0
     airflow_dict = values_dict['airflow']
     airflow = airflow_dict['flow']
-    if airflow < 0:
+    if airflow < 0.005:
         airflow = 0
     return [pressure, airflow]
 
