@@ -84,7 +84,7 @@ def program_thread():
                     db.insert_input(fermentation_nr, timestamp, flow, press, temp)
                     print ("\n\n\nread data"
                            "\nduration[days]:", duration_days,
-                           "\nflow [bar]:", flow,
+                           "\nflow [SLPM]:", flow,
                            "\npressure [bar]:", press,
                            "\ntemperature [°C]:", temp)
                     
@@ -162,7 +162,7 @@ def program_thread():
                     
                     
                     print ("\n\n\nconverted data \n duration[days]:", duration_days,
-                           "\nflow [SLPM]:", flow_30s,
+                           "\nflow [l/30s]:", flow_30s,
                            "\npressure [bar]:", pressure,
                            "\ntemperature [°C]:", temperature,
                            "\nphase:", phase,
