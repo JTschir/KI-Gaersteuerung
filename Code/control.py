@@ -120,7 +120,7 @@ def adjust_parameter(goal24, pressure, temperature,
     #   -----   load model for regression of fermentation process   -----
     model_extract = pickle.load(open(regression_path, 'rb'))
 
-    while done == False and -2.1 < set_temperature_new-temperature < 2.1 and set_pressure_new <=1.1:
+    while done == False and -2.1 < set_temperature_new-temperature < 2.1 and set_pressure_new <=2.1:
         
         #   -----   input   -----
         X = np.array([set_pressure_new, set_temperature_new, extract, delta6]).reshape(1, -1)
