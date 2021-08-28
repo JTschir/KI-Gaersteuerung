@@ -114,8 +114,8 @@ def adjust_parameter(goal24, set_pressure, set_temperature,
     
     regression_path = 'models/reg_model.sav'
     done = False
-    set_temperature_new = set_temperature+1.01325
-    set_pressure_new = set_pressure
+    set_temperature_new = set_temperature
+    set_pressure_new = set_pressure+1.01325
     
     #   -----   load model for regression of fermentation process   -----
     model_extract = pickle.load(open(regression_path, 'rb'))
@@ -142,6 +142,8 @@ def adjust_parameter(goal24, set_pressure, set_temperature,
             set_temperature_new += 0.2
             set_pressure_new = 0
     
+    
+    set_pressure_new -= 1.01325
     #   -----   CHECK BORDERS   -----
     if set_pressure <= 1:
         set_pressure = set_pressure_new
@@ -154,6 +156,7 @@ def adjust_parameter(goal24, set_pressure, set_temperature,
         set_temperature = 4
     elif set_temperature >= 14:
         set_temperature = 14
+        
         
     com.set_temperature(set_temperature)
     com.set_pressure(set_pressure)
