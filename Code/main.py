@@ -119,13 +119,18 @@ def program_thread():
                     ########################################################################
                     ###                 EVERY 30 MINUTES                                 ###
                     ########################################################################
-                    if timestamp >= timestamp_old_ml+1800:
+                    if timestamp >= timestamp_old_ml+100:
                         
                         #   -------------------------------------------------------------------
                         #                   MODEL 1: CHECK FERMENTATION PHASE
                         #   -------------------------------------------------------------------
-                        phase = ctrl.find_phase(duration_days, extract_delta6)
+                        #phase = ctrl.find_phase(duration_days, extract_delta6)
+                        phase = 2
                         if phase == 2:
+                            
+                            
+                            extract_seeming=9.4
+                            extract_delta6=0.35
                             
                             #   -------------------------------------------------------------------
                             #                   CONTROL WITH MODEL 2
@@ -165,6 +170,7 @@ def program_thread():
                            "\nphase:", phase,
                            "\nextract_seeming [bar]:", extract_seeming,
                            "\nextract_delta24", press,
+                           "\nextract_seeming_in_6h [bar]:", extract_6h_future,
                            "\nset_temperature [°C]:", set_temperature,
                            "\nset_pressure [bar]", set_pressure)
 
