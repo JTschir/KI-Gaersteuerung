@@ -24,10 +24,12 @@ API_ROOT = "http://brewio.uni-hannover.de"
 headers = { "Authorization": f"Bearer {API_KEY}" }
 sql_query = 'SELECT%20distinct("temperature")%20FROM%20"brew"%20WHERE%20("name"%20%3D%20%27gaertank1%27)%20AND%20time%20>%3D%20now()%20-%201m%20GROUP%20BY%20time(1m)%20fill(null)&epoch=ms'
 
-def read_temperature():
-    result = requests.get(f"{API_ROOT}/api/datasources/proxy/1/query?db=brewio&q={sql_query}", headers=headers).json()
-    return result["results"][0]["series"][0]["values"][-1][1]
-
+def read_temperature(temp):
+    try:
+        result = requests.get(f"{API_ROOT}/api/datasources/proxy/1/query?db=brewio&q={sql_query}", headers=headers).json()
+        return result["results"][0]["series"][0]["values"][-1][1]
+    except:
+        return temp
 
 #   -------------------------------------------------------------------------------------
 #                                       PRESSURE & FLOW

@@ -22,6 +22,7 @@ def program_thread():
     extract_seeming = 0
     extract_true = 0
     extract_6h_future = 0
+    temp = 0
     timestamp_old = 0
     timestamp_old_ml = 0
     fermentation_nr = (db.read("Suddetails", "Max(SudID)"))[0][0]+1         # add 1 to highest value of SudID in DB
@@ -80,7 +81,7 @@ def program_thread():
                     duration_days = round((timestamp - start_timestamp)*(1/86400),4)
                     press = com.read_pressure_flow()[0]
                     flow = com.read_pressure_flow()[0]
-                    temp = com.read_temperature()                      # !!!!! noch unklar !!!!!
+                    temp = com.read_temperature(temp)                      # !!!!! noch unklar !!!!!
                     db.insert_input(fermentation_nr, timestamp, flow, press, temp)
                     print ("\n\n\nread data"
                            "\nduration[days]:", duration_days,
