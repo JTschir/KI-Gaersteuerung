@@ -64,7 +64,6 @@ def program_thread():
             ###                         ITERATE WHILE ACTIVE                             ###
             ################################################################################
             while configs.run_program:
-                print("Active program")
                 
                 now = datetime.now()
                 timestamp = round(datetime.timestamp(now))

@@ -139,7 +139,7 @@ def adjust_parameter(goal24, set_pressure, set_temperature,
         elif control_parameter <= -0.1:
             set_temperature_new -= 0.2
         elif control_parameter >= -0.1:
-            set_temperature_new -= 0.2
+            set_temperature_new += 0.2
             set_pressure_new = 0
     
     #   -----   CHECK BORDERS   -----
