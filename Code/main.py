@@ -51,8 +51,9 @@ def program_thread():
             print("set_pressure:", configs.set_pressure)
             db.insert_suddetails(fermentation_nr, configs.sw, configs.tank_vol, configs.wort_vol, configs.delta_goal)
             #   -----   INDIVIDUAL CONSTANTS AT START   -----
-            start_date = datetime.now()
-            start_timestamp = datetime.timestamp(start_date)
+            #start_date = datetime.now()
+            #start_timestamp = datetime.timestamp(start_date)
+            start_timestamp = 1630345314
             specific_weigth = (sw*4/1000)+1                     
             wort_mass = (wort_vol*1000)*specific_weigth                 # [kg],  (notice conversions: m^3 -> liter)
             rest_volume = (tank_vol - wort_vol)                         # [m^3]
@@ -80,8 +81,8 @@ def program_thread():
                     
                     duration_days = round((timestamp - start_timestamp)*(1/86400),4)
                     press = com.read_pressure_flow()[0]
-                    flow = com.read_pressure_flow()[0]
-                    temp = com.read_temperature(temp)                      # !!!!! noch unklar !!!!!
+                    flow = com.read_pressure_flow()[1]
+                    temp = com.read_temperature(temp)
                     db.insert_input(fermentation_nr, timestamp, flow, press, temp)
                     print ("\n\n\nread data"
                            "\nduration[days]:", duration_days,
