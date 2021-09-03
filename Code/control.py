@@ -44,19 +44,19 @@ def calc_extract(pressure_for_calc, temperature_for_calc, flow_for_calc, flow_ma
     #   -----   CO2 flow mass   -----
     flow_mass = flow_for_calc * density * 0.001                     # [kg]
     flow_mass_sum += flow_mass                                      # [kg]
-
+    print("flow_mass_sum:", flow_mass_sum)
     #   -----   CO2 mass in beer    -----
     temp_compensation = math.exp(2400 * ((1/temperature_kelvin) - (1/298.15)))          # for Henry's law
     henry_coefficient = henry_const * temp_compensation                                 # [mol/(l*bar)], Henry coefficient for CO2 
     co2__concentration = henry_coefficient * pressure_for_calc                          # [mol/l], concentration of co2 in liquid
     co2_in_liquid_mass = mol_mass * wort_vol * co2__concentration                       # [kg]
-
+    print("co2_in_liquid_mass:", co2_in_liquid_mass)
     #   -----   CO2 mass in rest volume -----
     rest_mass = (pressure_for_calc * 100000 * rest_volume) / (188.9 * temperature_kelvin)   # [kg] (notice conversions: bar -> Pa)
-
+    print("rest_mass:", rest_mass)
     #   -----   total co2 mass till now  -----
     total_co2_mass = flow_mass_sum + co2_in_liquid_mass + rest_mass             # [kg]
-
+    print("total_co2_mass:", total_co2_mass)
     #   -----   extract  -----
     extract_mass_converted = total_co2_mass * 2.1605                            # [kg]
     degree_of_fermentation = extract_mass_converted / extract_mass_start
