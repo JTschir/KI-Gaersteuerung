@@ -165,6 +165,7 @@ def program_thread():
                     
                     print ("\n\n\nconverted data \n duration[days]:", duration_days,
                            "\nflow [l/30s]:", flow_30s,
+                           "\nflow_sum [l]:", flow_sum,
                            "\npressure [bar]:", pressure,
                            "\ntemperature [°C]:", temperature,
                            "\nphase:", phase,
