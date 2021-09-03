@@ -165,6 +165,8 @@ def program_thread():
                     
                     print ("\n\n\nconverted data \n duration[days]:", duration_days,
                            "\nflow [l/30s]:", flow_30s,
+                           "\nflow_sum [l]:", flow_mass_sum,
+                           "\nflow mass sum [kg]:", flow_mass_sum,
                            "\npressure [bar]:", pressure,
                            "\ntemperature [°C]:", temperature,
                            "\nphase:", phase,
@@ -177,7 +179,7 @@ def program_thread():
                 
     
                   
-            print("Prgram stopped")
+            print("Program stopped")
     except KeyboardInterrupt:
         print("exit")
 
