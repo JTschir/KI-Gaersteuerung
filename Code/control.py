@@ -148,7 +148,7 @@ def adjust_parameter(goal24, pressure, temperature,
     
     set_pressure_new -= 1.01325
     #   -----   CHECK BORDERS   -----
-    if set_pressure_new <= 0.02:
+    if set_pressure_new <= 0.6:
         set_pressure = 0.02
     elif set_pressure_new <= 1:
         set_pressure = set_pressure_new
