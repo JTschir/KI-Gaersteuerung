@@ -66,21 +66,25 @@ def calc_extract(pressure_for_calc, temperature_for_calc, flow_for_calc, flow_ma
     extract_s = np.append(extract_s, extract_seeming)
 
     #   -----   extract seeming delta   -----
-    # 24 hours 
-    if len(extract_s) > 17280:
-        extract_delta24 = extract_s[-2880] - extract_s[-1]
-    else:
-        extract_delta24 = 0
-    # 6 hours
-    if len(extract_s) > 720:
-        extract_delta6 = extract_s[-720] - extract_s[-1]
-    else:
-        extract_delta6 = 0
     # 30 minutes
     if len(extract_s) > 60:
         extract_delta05 = extract_s[-60] - extract_s[-1]
     else:
         extract_delta05 = 0
+        
+    # 6 hours
+    if len(extract_s) > 720:
+        extract_delta6 = extract_s[-720] - extract_s[-1]
+    else:
+        extract_delta6 = extract_delta05 * 12
+        
+    # 24 hours 
+    if len(extract_s) > 17280:
+        extract_delta24 = extract_s[-2880] - extract_s[-1]
+    else:
+        extract_delta24 = extract_delta6 * 4
+
+
 
 
     return flow_mass_sum, extract_true, extract_s, extract_seeming, extract_delta05, extract_delta6 ,extract_delta24
