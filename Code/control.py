@@ -151,12 +151,12 @@ def adjust_parameter(goal24, pressure, temperature,
     if set_pressure_new <= 0.6:
         set_pressure = 0.02
     elif set_pressure_new <= 1:
-        set_pressure = set_pressure_new
+        set_pressure = round(set_pressure_new,1)
     elif set_pressure_new >= 1:
         set_pressure = 1
     
     if 4 <= set_temperature_new <= 15:
-        set_temperature = set_temperature_new
+        set_temperature = round(set_temperature_new,2)
     elif set_temperature_new <= 4:
         set_temperature = 4
     elif set_temperature_new >= 15:
