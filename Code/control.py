@@ -135,20 +135,19 @@ def adjust_parameter(goal24, pressure, temperature,
         delta6_future = extract_6h - extract
         check_delta = delta6_future*4
         control_parameter = goal24 - check_delta
-        i = 0
+
         if -0.1 <= control_parameter <= 0.1:
             done = True
         elif control_parameter <= -0.1:
-            i += 1
             set_temperature_new -= 0.1
-            if i%11 == 0:
+            if control_parameter <= -0.5:
                 set_pressure_new += 0.1
         elif control_parameter >= -0.1:
             set_temperature_new += 0.1
     
     set_pressure_new -= 1.01325
     #   -----   CHECK BORDERS   -----
-    if set_pressure_new <= 0.6:
+    if set_pressure_new <= 0.3:
         set_pressure = 0.02
     elif set_pressure_new <= 1:
         set_pressure = round(set_pressure_new,1)
