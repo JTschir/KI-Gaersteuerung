@@ -120,7 +120,7 @@ def program_thread():
                     ########################################################################
                     ###                 EVERY 30 MINUTES                                 ###
                     ########################################################################
-                    if timestamp >= timestamp_old_ml+3600:
+                    if timestamp >= timestamp_old_ml+7200:
                         print("\n\n\nstart ml")
                         #   -------------------------------------------------------------------
                         #                   MODEL 1: CHECK FERMENTATION PHASE
